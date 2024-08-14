@@ -1,0 +1,14 @@
+#version: '3'
+
+services:
+  kylin:
+    container_name: apachekylin
+    image: apachekylin/apache-kylin-standalone:kylin-4.0.1-mondrian
+    ports:
+      - "7070:7070"
+      - "7080:7080"
+      - "8088:8088"
+      - "50070:50070"
+      - "8032:8032"
+      - "8042:8042"
+      - "2181:2181"
