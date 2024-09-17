@@ -12,3 +12,6 @@ HDFS	http://localhost:9870⁠
 
 - USUARIO: ADMIN
 - CLAVE: KYLIN
+
+python3 -m venv env_python
+pip install -r requirements.txt
