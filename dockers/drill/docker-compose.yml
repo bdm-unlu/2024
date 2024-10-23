@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+
+  jupyter:
+    build:
+      context: ./jupyter
+    ports:
+      - "8888:8888"
+      - "8050:8050"
+      - "8501:8501"
+    #links:
+    #  - postgres
+    volumes:
+          - "./notebooks:/notebooks" 
+          - "./data:/data"
+  drill: 
+    build:
+      context: ./drill
+    hostname: drill
+    container_name: drill
+    volumes:
+      # The data directory for the data files.
+      - ./data:/data
+    # We make the standard drill ports available
+    ports:
+      - "8047:8047"
+      - "31010:31010"
+    # We allow for console
+    tty: true
+
+  drill_mysql:
+    image: mysql:5.7
+    ports:
+     - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: bdm
+
+  drill_phpmyadmin:
+    depends_on:
+      - drill_mysql
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '6030:80'
+    environment:
+      PMA_HOST: drill_mysql
+
+  drill_postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/data
+    ports:
+      - "5470:5432"
+
+  drill_pgadmin:
+    container_name: drillpgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: bdm@bdm.com
+      PGADMIN_DEFAULT_PASSWORD: bdm
+    ports:
+      - "6040:80"
